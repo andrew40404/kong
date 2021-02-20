@@ -1,6 +1,7 @@
 local declarative = require("kong.db.declarative")
 local reports = require("kong.reports")
 local errors = require("kong.db.errors")
+local arguments = require "kong.api.arguments"
 
 
 local kong = kong
@@ -77,9 +78,14 @@ return {
       else
         local config = self.params.config
         if not config then
-          return kong.response.exit(400, {
-            message = "expected a declarative configuration"
-          })
+          local body = kong.request.get_raw_body()
+          if type(body) == "string" and #body > 0 then
+            config = body
+          else
+            return kong.response.exit(400, {
+              message = "expected a declarative configuration"
+            })
+          end
         end
         entities, _, err_t, meta, new_hash =
           dc:parse_string(config, nil, accept, old_hash)

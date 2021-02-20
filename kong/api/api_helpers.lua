@@ -227,9 +227,11 @@ function _M.before_filter(self)
       end
     end
 
-  elseif sub(content_type, 1, 16) == "application/json"                  or
-         sub(content_type, 1, 19) == "multipart/form-data"               or
-         sub(content_type, 1, 33) == "application/x-www-form-urlencoded" then
+  elseif sub(content_type, 1, 16) == "application/json"
+      or sub(content_type, 1, 19) == "multipart/form-data"
+      or sub(content_type, 1, 33) == "application/x-www-form-urlencoded"
+      or sub(content_type, 1,  9) == "text/yaml"
+  then
     return
   end
 
